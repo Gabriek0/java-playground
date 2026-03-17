@@ -75,18 +75,18 @@ public class BookService {
         return book;
     };
 
-//    public Optional<Book> findByAuthor(Author author) {
-//        Optional<Book> book = Optional.empty();
-//
-//        ArrayList<Book> books = listBooks();
-//
-//        for (Book value : books) {
-//            if (Objects.equals(value.getAuthor(), author)) {
-//                book = Optional.of(value);
-//                break;
-//            }
-//        }
-//
-//        return book;
-//    };
+    public Optional<Book> findByAuthor(String authorName) {
+        Optional<Book> book = Optional.empty();
+
+        ArrayList<Book> books = listBooks();
+
+        for (Book value : books) {
+            if (Objects.equals(value.getAuthor().getName(), authorName)) {
+                book = Optional.of(value);
+                break;
+            }
+        }
+
+        return book;
+    };
 }
