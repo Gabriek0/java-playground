@@ -1,6 +1,6 @@
 package main.java.com.library_management.model;
 
-import main.java.com.library_management.Genre;
+import main.java.com.library_management.enums.Genre;
 
 import java.util.UUID;
 

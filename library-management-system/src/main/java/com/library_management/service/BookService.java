@@ -1,8 +1,7 @@
 package main.java.com.library_management.service;
 
-import main.java.com.library_management.Genre;
+import main.java.com.library_management.enums.Genre;
 import main.java.com.library_management.interfaces.Repository;
-import main.java.com.library_management.model.Author;
 import main.java.com.library_management.model.Book;
 
 import java.util.ArrayList;
