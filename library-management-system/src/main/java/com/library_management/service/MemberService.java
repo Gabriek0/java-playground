@@ -2,35 +2,44 @@ package main.java.com.library_management.service;
 
 import main.java.com.library_management.interfaces.Repository;
 import main.java.com.library_management.model.Member;
-import main.java.com.library_management.repository.MemberRepository;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MemberService {
     private final Repository<Member, String> memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(Repository<Member, String> memberRepository) {
         this.memberRepository = memberRepository;
     }
 
     public void createMember(Member item) {
-        Optional<Member> memberExists = getByEmail(item.getEmail());
+        Optional<Member> member = findByEmail(item.getEmail());
 
-        if (memberExists.isPresent()) {
-            System.out.println("This email address has already been registered");
-            return;
+        if (member.isPresent()) {
+            throw new IllegalArgumentException("This email address has already been registered");
         }
 
         memberRepository.create(item);
     }
 
     public void updateMember(String id, Member item) {
+        Optional<Member> member = findByEmail(item.getEmail());
+
+        if (member.isPresent() && !member.get().getId().equals(id)) {
+            throw new IllegalArgumentException("This email address has already been registered");
+        }
+
         memberRepository.update(id, item);
     }
 
     public void removeMember(String id) {
+        Optional<Member> member = findById(id);
+
+        if (member.isEmpty()) {
+            throw new IllegalArgumentException("The member with that ID does not exist");
+        }
+
         memberRepository.delete(id);
     }
 
@@ -38,29 +47,15 @@ public class MemberService {
         return memberRepository.list();
     }
 
-    public Optional<Member> getByEmail(String email) {
-        Optional<Member> member = Optional.empty();
-        ArrayList<Member> members = listMembers();
-
-        for (Member value : members) {
-            if (value.getEmail().equals(email)) {
-                member = Optional.of(value);
-            }
-        }
-
-        return member;
+    public Optional<Member> findById(String id) {
+        return listMembers().stream().filter(member -> member.getId().equals(id)).findFirst();
     }
 
-    public Optional<Member> getByName(String name) {
-        Optional<Member> member = Optional.empty();
-        ArrayList<Member> members = listMembers();
+    public Optional<Member> findByEmail(String email) {
+        return listMembers().stream().filter(member -> member.getEmail().equals(email)).findFirst();
+    }
 
-        for (Member value : members) {
-            if (value.getName().equals(name)) {
-                member = Optional.of(value);
-            }
-        }
-
-        return member;
+    public List<Member> findByName(String name) {
+        return listMembers().stream().filter(member -> member.getName().equalsIgnoreCase(name)).collect(Collectors.toList());
     }
 }
