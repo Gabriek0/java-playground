@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class BookRepository implements Repository<Book, String> {
-    ArrayList<Book> books = new ArrayList<>();
+    private ArrayList<Book> books = new ArrayList<>();
 
     public void create(Book book) {
         books.add(book);
