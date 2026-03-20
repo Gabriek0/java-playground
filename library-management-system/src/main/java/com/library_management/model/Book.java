@@ -5,7 +5,7 @@ import main.java.com.library_management.enums.Genre;
 import java.util.UUID;
 
 public class Book {
-    private UUID id;
+    private String id;
     private String title;
     private Author author;
     private String isbn;
@@ -14,7 +14,7 @@ public class Book {
     private int availableCopies;
 
     public Book(String title, Author author, String isbn, int year, Genre genre, int availableCopies) {
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -23,7 +23,7 @@ public class Book {
         this.availableCopies = availableCopies;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -69,11 +69,6 @@ public class Book {
 
     @Override
     public String toString() {
-        return
-                "ISBN: " + isbn + '\n' +
-                "Títle: " + title + '\n' +
-                "Year: " + year + '\n' +
-                "Genre: " + genre + '\n' +
-                "Available copies: " + availableCopies + '\n';
+        return "ISBN: " + isbn + '\n' + "Títle: " + title + '\n' + "Year: " + year + '\n' + "Genre: " + genre + '\n' + "Available copies: " + availableCopies + '\n';
     }
 }
