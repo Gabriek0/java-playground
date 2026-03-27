@@ -5,8 +5,10 @@ import main.java.com.library_management.interfaces.Repository;
 import main.java.com.library_management.model.Book;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class BookService {
     private final Repository<Book, String> bookRepository;
@@ -46,47 +48,14 @@ public class BookService {
     }
 
     public Optional<Book> findByIsbn(String isbn) {
-        Optional<Book> book = Optional.empty();
-
-        ArrayList<Book> books = listBooks();
-
-        for (Book value : books) {
-            if (Objects.equals(value.getIsbn(), isbn)) {
-                book = Optional.of(value);
-                break;
-            }
-        }
-
-        return book;
+        return listBooks().stream().filter(book -> book.getIsbn().equals(isbn)).findFirst();
     }
 
-    public Optional<Book> findByGenre(Genre genre) {
-        Optional<Book> book = Optional.empty();
-
-        ArrayList<Book> books = listBooks();
-
-        for (Book value : books) {
-            if (Objects.equals(value.getGenre(), genre.toString())) {
-                book = Optional.of(value);
-                break;
-            }
-        }
-
-        return book;
+    public List<Book> findByGenre(Genre genre) {
+        return bookRepository.list().stream().filter(book -> book.getGenre() == genre).collect(Collectors.toList());
     };
 
-    public Optional<Book> findByAuthor(String authorName) {
-        Optional<Book> book = Optional.empty();
-
-        ArrayList<Book> books = listBooks();
-
-        for (Book value : books) {
-            if (Objects.equals(value.getAuthor().getName(), authorName)) {
-                book = Optional.of(value);
-                break;
-            }
-        }
-
-        return book;
+    public List<Book> findByAuthor(String authorName) {
+        return bookRepository.list().stream().filter(book -> book.getAuthor().getName().equals(authorName)).collect(Collectors.toList());
     };
 }
