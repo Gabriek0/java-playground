@@ -55,12 +55,16 @@ public class Book {
         this.year = year;
     }
 
-    public String getGenre() {
-        return genre.toString();
+    public Genre getGenre() {
+        return genre;
     }
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public void setAvailableCopies(int availableCopies) {
+        this.availableCopies = availableCopies;
     }
 
     public int getAvailableCopies() {
