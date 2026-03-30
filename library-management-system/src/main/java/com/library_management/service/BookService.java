@@ -4,10 +4,9 @@ import main.java.com.library_management.enums.Genre;
 import main.java.com.library_management.interfaces.Repository;
 import main.java.com.library_management.model.Book;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class BookService {
@@ -18,33 +17,41 @@ public class BookService {
     }
 
     public void createBook(Book book) {
-        Optional<Book> bookExists = findByIsbn(book.getIsbn());
-
-        if (bookExists.isPresent()) {
-            System.out.println("There is already a book with the same ISBN");
+        if (findByIsbn(book.getIsbn()).isPresent()) {
+            System.out.println("A book with ISBN " + book.getIsbn() + " already exists");
             return;
         }
 
         bookRepository.create(book);
+
+        System.out.println(book);
+        System.out.println("Book successfully created!");
     }
 
     public void updateBook(Book book) {
-        Optional<Book> bookExists = findByIsbn(book.getIsbn());
-
-        if (bookExists.isEmpty()) {
-            System.out.println("The item you entered does not exist");
+        if (findByIsbn(book.getIsbn()).isEmpty()) {
+            System.out.println("No book found with ISBN " + book.getIsbn());
             return;
         }
 
         bookRepository.update(book.getIsbn(), book);
+
+        System.out.println(book);
+        System.out.println("Book successfully updated!");
     }
 
     public void deleteBook(String isbn) {
-        this.bookRepository.delete(isbn);
+        if (findByIsbn(isbn).isEmpty()) {
+            System.out.println("No book found with ISBN " + isbn);
+            return;
+        }
+
+        bookRepository.delete(isbn);
+        System.out.println("Book successfully deleted!");
     }
 
     public ArrayList<Book> listBooks() {
-        return this.bookRepository.list();
+        return bookRepository.list();
     }
 
     public Optional<Book> findByIsbn(String isbn) {
