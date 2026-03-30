@@ -3,7 +3,9 @@ package main.java.com.library_management.service;
 import main.java.com.library_management.interfaces.Repository;
 import main.java.com.library_management.model.Member;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class MemberService {
@@ -14,36 +16,46 @@ public class MemberService {
     }
 
     public void createMember(Member item) {
-        Optional<Member> member = findByEmail(item.getEmail());
-
-        if (member.isPresent()) {
-            throw new IllegalArgumentException("This email address has already been registered");
+        if (findByEmail(item.getEmail()).isPresent()) {
+            System.out.println("A member with email " + item.getEmail() + " is already registered");
+            return;
         }
 
         memberRepository.create(item);
+
+        System.out.println(item);
+        System.out.println("Member successfully registered!");
     }
 
     public void updateMember(String id, Member item) {
-        Optional<Member> member = findByEmail(item.getEmail());
+        if (findById(id).isEmpty()) {
+            System.out.println("No member found with ID " + id);
+            return;
+        }
 
-        if (member.isPresent() && !member.get().getId().equals(id)) {
-            throw new IllegalArgumentException("This email address has already been registered");
+        Optional<Member> memberWithEmail = findByEmail(item.getEmail());
+        if (memberWithEmail.isPresent() && !memberWithEmail.get().getId().equals(id)) {
+            System.out.println("A member with email " + item.getEmail() + " is already registered");
+            return;
         }
 
         memberRepository.update(id, item);
+
+        System.out.println(item);
+        System.out.println("Member successfully updated!");
     }
 
     public void removeMember(String id) {
-        Optional<Member> member = findById(id);
-
-        if (member.isEmpty()) {
-            throw new IllegalArgumentException("The member with that ID does not exist");
+        if (findById(id).isEmpty()) {
+            System.out.println("No member found with ID " + id);
+            return;
         }
 
         memberRepository.delete(id);
+        System.out.println("Member successfully removed!");
     }
 
-    public ArrayList<Member> listMembers () {
+    public ArrayList<Member> listMembers() {
         return memberRepository.list();
     }
 
