@@ -4,19 +4,20 @@ import main.java.com.library_management.interfaces.Repository;
 import main.java.com.library_management.model.Book;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Optional;
 
 public class BookRepository implements Repository<Book, String> {
     private ArrayList<Book> books = new ArrayList<>();
 
-    public void create(Book book) {
-        books.add(book);
+    public void create(Book item) {
+        books.add(item);
+
     }
 
-    public void update(String isbn, Book book) {
+    public void update(String isbn, Book item) {
         books.removeIf(b -> b.getIsbn().equals(isbn));
-        books.add(book);
+        books.add(item);
+
     }
 
     public ArrayList<Book> list() {
